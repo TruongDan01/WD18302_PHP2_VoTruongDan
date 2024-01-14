@@ -1,0 +1,90 @@
+<?php
+namespace App\Core;
+
+use App\Core\Connection;
+use App\Core\QueryBuilder;
+use PDOException;
+
+class Database
+{
+    private $_conn;
+    use QueryBuilder;
+
+    public function __construct()
+    {
+        $this->_conn = Connection::getInstance();
+    }
+
+    public function insertData($table, $data)
+    {
+        if (!empty($data)) {
+            $fielStr = '';
+            $valueStr = '';
+            foreach ($data as $key => $value) {
+                $fielStr .= $key . ',';
+                $valueStr .= "'" . $value . "',";
+            }
+
+            $fielStr = rtrim($fielStr, ',');
+            $valueStr = rtrim($valueStr, ',');
+            $sql = "INSERT INTO  $table($fielStr) VALUES ($valueStr)";
+            $status = $this->query($sql);
+            if (!$status) return false;
+        }
+        return true;
+    }
+
+    public function updateData($table, $data, $condition = '')
+    {
+        if (!empty($data)) {
+            $updateStr = '';
+            foreach ($data as $key => $value) {
+                if (strpos($value, ' ') !== false) {
+                    $updateStr .= "$key=$value,";
+                } else if ($value === '' || $value === null) {
+                    $updateStr .= "$key=NULL,";
+                } else {
+                    $updateStr .= "$key='$value',";
+                }
+            }
+            $updateStr = rtrim($updateStr, ',');
+            $sql = "UPDATE $table SET $updateStr";
+            if (!empty($condition)) {
+                $sql = "UPDATE $table SET $updateStr WHERE $condition";
+            }
+            $status = $this->query($sql);
+            if (!$status) return false;
+        }
+        return true;
+    }
+
+    public function deleteData($table, $condition = ''): bool
+    {
+        $sql = 'DELETE FROM ' . $table;
+        if (!empty($condition)) {
+            $sql = 'DELETE FROM ' . $table . ' WHERE ' . $condition;
+        }
+        $status = $this->query($sql);
+        if (!$status) return false;
+        return true;
+    }
+
+    public function query($sql)
+    {
+        $this->_conn = Connection::getInstance();
+        try {
+            $statement = $this->_conn->prepare($sql);
+            $statement->execute();
+            return $statement;
+        } catch (PDOException $ex) {
+            $mess = $ex->getMessage();
+            $data['message'] = $mess;
+            die();
+        }
+    }
+
+    public function lastInsertId()
+    {
+        return  $this->_conn->lastInsertId();
+    }
+}
