@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     $usersModel = new UsersModel();
     $user = $usersModel->insertUser($dataUser);
-    if(!$user) {
+    if (!$user) {
         $info = $usersModel->getUserById();
     }
 }
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="formatted-key">Name:</span>
+                            <span class="formatted-key">Tên:</span>
                             <span class="badge bg-primary rounded-pill formatted-value"><?php echo $info['name']; ?></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
