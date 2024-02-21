@@ -19,7 +19,7 @@ The database configuration can be found in the `configs/database.php` file.
 
 The `feedback.sql` file in the `Lab1` directory contains the SQL statements for managing feedback.
 
-### Lab 2
+## Lab 2
 
 This lab consists of the following exercises:
 
