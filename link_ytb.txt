@@ -1,0 +1,2 @@
+youtube: https://youtu.be/y0kgGccD9tk
+github: https://github.com/TruongDan01/WD18302_PHP2_VoTruongDan/tree/LAB/ASM
